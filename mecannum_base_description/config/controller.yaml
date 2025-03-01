@@ -1,0 +1,22 @@
+joint_state_controller:
+  type: joint_state_broadcaster/JointStateBroadcaster
+
+front_right_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: base_front_right_wheel_joint
+  pid: {p: 1.0, i: 0.0, d: 0.1}
+
+front_left_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: base_front_left_wheel_joint
+  pid: {p: 1.0, i: 0.0, d: 0.1}
+
+rear_right_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: base_rear_right_wheel_joint
+  pid: {p: 1.0, i: 0.0, d: 0.1}
+
+rear_left_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: base_rear_left_wheel_joint
+  pid: {p: 1.0, i: 0.0, d: 0.1}

@@ -1,0 +1,33 @@
+<launch>
+    <let name="urdf_path"
+         value="$(find-pkg-share mecannum_base_description)/urdf/my_robot.xacro" />
+
+    <let name="rviz_config_path"
+         value="$(find-pkg-share mecannum_base_bringup)/config/urdf_config.rviz" />
+
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description"
+               value="$(command 'xacro $(var urdf_path)')" />
+    </node>
+
+    <!-- <node name="controller_manager" pkg="controller_manager" type="ros2_control_node"
+        respawn="false" output="screen">
+        <param file="$(find-pkg-share mecannum_base_description)/config/controller.yaml" command="load"/>
+    </node>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner"
+          args="joint_state_controller front_right_controller front_left_controller rear_right_controller rear_left_controller" /> -->
+
+    <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" />
+
+    
+
+    <include file="$(find-pkg-share gazebo_ros)/launch/gazebo.launch.py" />
+
+    <node pkg="gazebo_ros" exec="spawn_entity.py"
+          args="-topic robot_description -entity mecannum_base" />
+
+    <node pkg="rviz2" exec="rviz2"
+          args="-d $(var rviz_config_path)" />
+
+</launch>

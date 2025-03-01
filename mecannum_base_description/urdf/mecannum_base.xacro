@@ -18,6 +18,14 @@
             <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0" />
             <material name="blue" />
         </visual>
+        <collision>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}" />
+            </geometry>
+            <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0" />
+        </collision>
+        <xacro:box_inertia m="7.0" l="${base_length}" w="${base_width}" h="${base_height}" 
+                           xyz="0 0 ${base_height / 2.0}" rpy="0 0 0" />
     </link>
 
     <joint name="base_footprint_base_link_joint" type="fixed">
@@ -28,13 +36,14 @@
 
     <xacro:macro name="wheel_link" params="prefix mesh_filename is_left">
         <link name="${prefix}_wheel_link">
+            <xacro:property name="y_offset" value="0" />
             <visual>
                 <geometry>
-                    <mesh filename="package://mecannum_base_description/meshes/${mesh_filename}" scale="0.00133 0.00133 0.00092"/>
+                    <mesh filename="${mesh_filename}" scale="0.00133 0.00133 0.00092"/>
                 </geometry>
                 
                 <!-- Define a temporary variable for adjusting the origin -->
-                <xacro:property name="y_offset" value="0" />
+                
                 <xacro:if value="${is_left}">
                     <xacro:property name="y_offset" value="${-(base_width - wheel_length) / 2.0}" />
                 </xacro:if>
@@ -42,13 +51,27 @@
                 <origin xyz="0 ${y_offset} 0" rpy="${pi / 2} 0 0" />
                 <material name="grey" />
             </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="${mesh_filename}" scale="0.00133 0.00133 0.00092"/>
+                </geometry>
+                
+                <!-- Define a temporary variable for adjusting the origin -->
+                
+                <xacro:if value="${is_left}">
+                    <xacro:property name="y_offset" value="${-(base_width - wheel_length) / 2.0}" />
+                </xacro:if>
+
+                <origin xyz="0 ${y_offset} 0" rpy="${pi / 2} 0 0" />
+            </collision>
+            <xacro:wheel_inertia m="0.5" r="${wheel_radius}" h="${wheel_length}" xyz="0 ${y_offset} 0" rpy="${pi / 2} 0 0" />
         </link>
     </xacro:macro>
 
 
 
     
-    <xacro:wheel_link prefix="rear_right" mesh_filename="Mecannum_Wheel_Left.stl" is_left="true" />
+    <xacro:wheel_link prefix="rear_right" mesh_filename="file://$(find mecannum_base_description)/meshes/Mecannum_Wheel_Left.stl" is_left="true" />
 
     <joint name="base_rear_right_wheel_joint" type="continuous">
         <parent link="base_link" />
@@ -57,7 +80,7 @@
         <axis xyz="0 1 0" />
     </joint>
 
-    <xacro:wheel_link prefix="rear_left" mesh_filename="Mecannum_Wheel_Right.stl" is_left="false" />
+    <xacro:wheel_link prefix="rear_left" mesh_filename="file://$(find mecannum_base_description)/meshes/Mecannum_Wheel_Right.stl" is_left="false" />
 
     <joint name="base_rear_left_wheel_joint" type="continuous">
         <parent link="base_link" />
@@ -66,7 +89,7 @@
         <axis xyz="0 1 0" />
     </joint>
 
-    <xacro:wheel_link prefix="front_right" mesh_filename="Mecannum_Wheel_Right.stl" is_left="false" />
+    <xacro:wheel_link prefix="front_right" mesh_filename="file://$(find mecannum_base_description)/meshes/Mecannum_Wheel_Right.stl" is_left="false" />
 
     <joint name="base_front_right_wheel_joint" type="continuous">
         <parent link="base_link" />
@@ -75,7 +98,7 @@
         <axis xyz="0 1 0" />
     </joint>
 
-    <xacro:wheel_link prefix="front_left" mesh_filename="Mecannum_Wheel_Left.stl" is_left="true" />
+    <xacro:wheel_link prefix="front_left" mesh_filename="file://$(find mecannum_base_description)/meshes/Mecannum_Wheel_Left.stl" is_left="true" />
 
     <joint name="base_front_left_wheel_joint" type="continuous">
         <parent link="base_link" />
